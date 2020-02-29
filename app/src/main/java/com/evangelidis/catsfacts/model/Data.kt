@@ -2,7 +2,7 @@ package com.evangelidis.catsfacts.model
 
 data class CatfactsResponse(
     val current_page: Int,
-    val `data`: ArrayList<DataX>,
+    val `data`: MutableList<DataX>,
     val first_page_url: String,
     val from: Int,
     val last_page: Int,

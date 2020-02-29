@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.catsfacts.R
+import com.evangelidis.catsfacts.model.DataX
 import com.evangelidis.catsfacts.viewmodel.ListViewModel
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.content_main.*
@@ -18,7 +19,6 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var viewModel : ListViewModel
-
     private val catfactsListAdapter = CatfactsListAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,21 +41,19 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         viewModel.catfacts.observe(this, Observer { catfacts ->
             catfacts?.let {
                 my_list_view.visibility = View.VISIBLE
+                it.data.shuffle()
                 catfactsListAdapter.updateCatfacts(it.data)
             }
         })
 
         viewModel.catfactLoadError.observe(this, Observer { isError ->
             isError?.let {
-                //list_error.visibility = if (it) View.VISIBLE else View.GONE
             }
         })
 
         viewModel.loading.observe(this, Observer { isLoading ->
             isLoading?.let {
-                //loading_view.visibility = if (it) View.VISIBLE else View.GONE
                 if (it){
-                    //list_error.visibility = View.GONE
                     my_list_view.visibility = View.GONE
                 }
             }
@@ -71,23 +69,19 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         val id = item.itemId
 
         if (id == R.id.action_surflle_data) {
-            //surfleData(list)
-            //observeViewModel()
-            catfactsListAdapter.shuffleCatfacts()
+            catfactsListAdapter.updateCatfacts(arrayListOf())
+            observeViewModel()
             return true
         } else if (id == R.id.action_retreive_new_data) {
-
-            //viewModel.refresh()
-            //observeViewModel()
-            catfactsListAdapter.shuffleCatfacts()
+            catfactsListAdapter.updateCatfacts(arrayListOf())
+            observeViewModel()
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        val drawer: DrawerLayout = findViewById(R.id.drawer_layout) as DrawerLayout
+        val drawer: DrawerLayout = findViewById(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true
     }

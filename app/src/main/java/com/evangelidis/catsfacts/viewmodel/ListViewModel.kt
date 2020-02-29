@@ -5,12 +5,10 @@ import androidx.lifecycle.ViewModel
 import com.evangelidis.catsfacts.di.DaggerApiComponent
 import com.evangelidis.catsfacts.model.CatfactsResponse
 import com.evangelidis.catsfacts.model.CatfactsService
-import com.evangelidis.catsfacts.model.DataX
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 import javax.inject.Inject
 
 class ListViewModel : ViewModel() {
@@ -33,7 +31,6 @@ class ListViewModel : ViewModel() {
     }
 
     private fun fetchCatfacts(){
-
         loading.value = true
         disposable.add(
             catfactsService.getCatfacts()
@@ -50,9 +47,7 @@ class ListViewModel : ViewModel() {
                         catfactLoadError.value = true
                         loading.value = false
                     }
-
                 })
         )
     }
-
 }

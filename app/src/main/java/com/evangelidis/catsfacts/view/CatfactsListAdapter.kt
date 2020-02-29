@@ -7,28 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.evangelidis.catsfacts.R
 import com.evangelidis.catsfacts.model.DataX
 import kotlinx.android.synthetic.main.row_item_layout.view.*
-import okhttp3.internal.Util
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.random.Random
 
-class CatfactsListAdapter(var catfacts : ArrayList<DataX>): RecyclerView.Adapter<CatfactsListAdapter.CatfactsViewHolder>() {
+class CatfactsListAdapter(var catfacts : MutableList<DataX>): RecyclerView.Adapter<CatfactsListAdapter.CatfactsViewHolder>() {
 
-    fun updateCatfacts(newCatfacts: ArrayList<DataX>){
+    fun updateCatfacts(newCatfacts: MutableList<DataX>){
         catfacts.clear()
         catfacts.addAll(newCatfacts)
-        notifyDataSetChanged()
-    }
-
-    private fun <T> Iterable<T>.shuffle(): List<T> {
-        val list = this.toMutableList().apply {  }
-        return list.shuffle()
-    }
-
-    fun shuffleCatfacts(){
-        val x = catfacts.shuffle()
-        catfacts.clear()
-        catfacts.addAll(x)
         notifyDataSetChanged()
     }
 
