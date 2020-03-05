@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="18sp"
-    android:textColor="#353535"
+    android:textColor="#fff"
     android:padding="10dp"
     android:fontFamily="@font/montserrat_extra_light"
     android:background="@drawable/rounded_corner"

@@ -27,10 +27,10 @@ class ListViewModel : ViewModel() {
     }
 
     fun refresh(){
-        fetchCatfacts()
+        fetchCatFacts()
     }
 
-    private fun fetchCatfacts(){
+    private fun fetchCatFacts(){
         loading.value = true
         disposable.add(
             catfactsService.getCatfacts()

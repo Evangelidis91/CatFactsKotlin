@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.catsfacts.R
-import com.evangelidis.catsfacts.model.DataX
 import com.evangelidis.catsfacts.viewmodel.ListViewModel
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.content_main.*
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.content_main.*
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var viewModel : ListViewModel
-    private val catfactsListAdapter = CatfactsListAdapter(arrayListOf())
+    private val catFactsListAdapter = CatfactsListAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,19 +29,19 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
 
         my_list_view.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = catfactsListAdapter
+            adapter = catFactsListAdapter
         }
 
         observeViewModel()
     }
 
-    fun observeViewModel() {
+    private fun observeViewModel() {
 
         viewModel.catfacts.observe(this, Observer { catfacts ->
             catfacts?.let {
                 my_list_view.visibility = View.VISIBLE
                 it.data.shuffle()
-                catfactsListAdapter.updateCatfacts(it.data)
+                catFactsListAdapter.updateCatfacts(it.data)
             }
         })
 
@@ -69,12 +68,12 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         val id = item.itemId
 
         if (id == R.id.action_surflle_data) {
-            catfactsListAdapter.updateCatfacts(arrayListOf())
+            catFactsListAdapter.updateCatfacts(arrayListOf())
             observeViewModel()
             return true
         } else if (id == R.id.action_retreive_new_data) {
-            catfactsListAdapter.updateCatfacts(arrayListOf())
-            observeViewModel()
+            catFactsListAdapter.updateCatfacts(arrayListOf())
+            viewModel.refresh()
             return true
         }
         return super.onOptionsItemSelected(item)
