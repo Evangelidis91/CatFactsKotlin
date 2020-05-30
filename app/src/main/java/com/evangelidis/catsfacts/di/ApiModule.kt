@@ -1,7 +1,8 @@
 package com.evangelidis.catsfacts.di
 
-import com.evangelidis.catsfacts.model.CatfactsApi
-import com.evangelidis.catsfacts.model.CatfactsService
+import com.evangelidis.catsfacts.Constants.BASE_URL
+import com.evangelidis.catsfacts.model.CatFactsApi
+import com.evangelidis.catsfacts.model.CatFactsService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -11,20 +12,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 class ApiModule {
 
-    private val BASE_URL = "https://catfact.ninja"
-
     @Provides
-    fun provideCountiesApi(): CatfactsApi {
+    fun provideCountiesApi(): CatFactsApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-            .create(CatfactsApi::class.java)
+            .create(CatFactsApi::class.java)
     }
 
     @Provides
-    fun provideCountriesService(): CatfactsService{
-        return  CatfactsService()
+    fun provideCountriesService(): CatFactsService{
+        return  CatFactsService()
     }
 }

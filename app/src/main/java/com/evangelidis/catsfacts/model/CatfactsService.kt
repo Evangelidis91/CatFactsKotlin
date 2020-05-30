@@ -4,16 +4,16 @@ import com.evangelidis.catsfacts.di.DaggerApiComponent
 import io.reactivex.Single
 import javax.inject.Inject
 
-class CatfactsService {
+class CatFactsService {
 
     @Inject
-    lateinit var api: CatfactsApi
+    lateinit var api: CatFactsApi
 
     init {
         DaggerApiComponent.create().inject(this)
     }
 
-    fun getCatfacts() : Single<CatfactsResponse> {
-        return api.getCatfacts()
+    fun getCatFacts() : Single<CatFactsResponse> {
+        return api.getCatFacts()
     }
 }
