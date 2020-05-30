@@ -1,5 +1,6 @@
 package com.evangelidis.catsfacts.view
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,17 +13,20 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.catsfacts.R
 import com.evangelidis.catsfacts.viewmodel.ListViewModel
+import com.evangelidis.tantintoast.TanTinToast
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var viewModel : ListViewModel
-    private val catFactsListAdapter = CatfactsListAdapter(arrayListOf())
+    private val catFactsListAdapter = CatFactsListAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.toolbar_color)))
 
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
         viewModel.refresh()
@@ -41,18 +45,24 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
             catfacts?.let {
                 my_list_view.visibility = View.VISIBLE
                 it.data.shuffle()
-                catFactsListAdapter.updateCatfacts(it.data)
+                catFactsListAdapter.updateCatFacts(it.data)
             }
         })
 
         viewModel.catfactLoadError.observe(this, Observer { isError ->
             isError?.let {
+                list_error.visibility = if (it) View.VISIBLE else View.GONE
+                if (it) {
+                    TanTinToast.Warning(this).text("Check please your internet connection").show()
+                }
             }
         })
 
         viewModel.loading.observe(this, Observer { isLoading ->
             isLoading?.let {
+                loading_view.visibility = if (it) View.VISIBLE else View.GONE
                 if (it){
+                    list_error.visibility = View.GONE
                     my_list_view.visibility = View.GONE
                 }
             }
@@ -68,11 +78,11 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         val id = item.itemId
 
         if (id == R.id.action_surflle_data) {
-            catFactsListAdapter.updateCatfacts(arrayListOf())
+            catFactsListAdapter.updateCatFacts(arrayListOf())
             observeViewModel()
             return true
         } else if (id == R.id.action_retreive_new_data) {
-            catFactsListAdapter.updateCatfacts(arrayListOf())
+            catFactsListAdapter.updateCatFacts(arrayListOf())
             viewModel.refresh()
             return true
         }

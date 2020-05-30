@@ -1,8 +1,8 @@
 package com.evangelidis.catsfacts.model
 
-data class CatfactsResponse(
+data class CatFactsResponse(
     val current_page: Int,
-    val `data`: MutableList<DataX>,
+    val `data`: MutableList<CatFact>,
     val first_page_url: String,
     val from: Int,
     val last_page: Int,
@@ -15,7 +15,7 @@ data class CatfactsResponse(
     val total: Int
 )
 
-data class DataX(
+data class CatFact(
     val fact: String,
     val length: Int
 )
