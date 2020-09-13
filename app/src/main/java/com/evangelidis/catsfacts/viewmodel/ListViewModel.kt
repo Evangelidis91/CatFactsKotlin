@@ -14,12 +14,12 @@ import javax.inject.Inject
 class ListViewModel : ViewModel() {
 
     @Inject
-    lateinit var catfactsService: CatFactsService
+    lateinit var catFactsService: CatFactsService
 
     private val disposable = CompositeDisposable()
 
-    val catfacts = MutableLiveData<CatFactsResponse>()
-    val catfactLoadError = MutableLiveData<Boolean>()
+    val catFacts = MutableLiveData<CatFactsResponse>()
+    val catFactLoadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
     init {
@@ -33,18 +33,18 @@ class ListViewModel : ViewModel() {
     private fun fetchCatFacts(){
         loading.value = true
         disposable.add(
-            catfactsService.getCatFacts()
+            catFactsService.getCatFacts()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<CatFactsResponse>(){
                     override fun onSuccess(response: CatFactsResponse) {
-                        catfacts.value = response
-                        catfactLoadError.value = false
+                        catFacts.value = response
+                        catFactLoadError.value = false
                         loading.value = false
                     }
 
                     override fun onError(e: Throwable) {
-                        catfactLoadError.value = true
+                        catFactLoadError.value = true
                         loading.value = false
                     }
                 })

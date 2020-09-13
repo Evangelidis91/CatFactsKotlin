@@ -4,34 +4,34 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.evangelidis.catsfacts.R
+import com.evangelidis.catsfacts.databinding.ActivityMainBinding
+import com.evangelidis.catsfacts.extensions.gone
+import com.evangelidis.catsfacts.extensions.show
+import com.evangelidis.catsfacts.extensions.showIf
 import com.evangelidis.catsfacts.viewmodel.ListViewModel
 import com.evangelidis.tantintoast.TanTinToast
-import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
-    lateinit var viewModel : ListViewModel
+    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+    lateinit var viewModel: ListViewModel
     private val catFactsListAdapter = CatFactsListAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.toolbar_color)))
 
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
         viewModel.refresh()
 
-        my_list_view.apply {
+        binding.myListView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = catFactsListAdapter
         }
@@ -41,29 +41,29 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
 
     private fun observeViewModel() {
 
-        viewModel.catfacts.observe(this, Observer { catfacts ->
-            catfacts?.let {
-                my_list_view.visibility = View.VISIBLE
+        viewModel.catFacts.observe(this, { catFacts ->
+            catFacts?.let {
+                binding.myListView.show()
                 it.data.shuffle()
                 catFactsListAdapter.updateCatFacts(it.data)
             }
         })
 
-        viewModel.catfactLoadError.observe(this, Observer { isError ->
+        viewModel.catFactLoadError.observe(this, { isError ->
             isError?.let {
-                list_error.visibility = if (it) View.VISIBLE else View.GONE
+                binding.listError.showIf { isError }
                 if (it) {
-                    TanTinToast.Warning(this).text("Check please your internet connection").show()
+                    TanTinToast.Warning(this).text(getString(R.string.internet_error_text)).show()
                 }
             }
         })
 
-        viewModel.loading.observe(this, Observer { isLoading ->
+        viewModel.loading.observe(this, { isLoading ->
             isLoading?.let {
-                loading_view.visibility = if (it) View.VISIBLE else View.GONE
-                if (it){
-                    list_error.visibility = View.GONE
-                    my_list_view.visibility = View.GONE
+                binding.loadingView.showIf { isLoading }
+                if (it) {
+                    binding.listError.gone()
+                    binding.myListView.gone()
                 }
             }
         })
@@ -89,9 +89,4 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        val drawer: DrawerLayout = findViewById(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
 }

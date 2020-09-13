@@ -1,37 +1,33 @@
 package com.evangelidis.catsfacts.view
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.evangelidis.catsfacts.R
+import com.evangelidis.catsfacts.databinding.RowItemLayoutBinding
 import com.evangelidis.catsfacts.model.CatFact
-import kotlinx.android.synthetic.main.row_item_layout.view.*
 
-class CatFactsListAdapter(var catfacts : MutableList<CatFact>): RecyclerView.Adapter<CatFactsListAdapter.CatFactsViewHolder>() {
+class CatFactsListAdapter(var catFacts: MutableList<CatFact>) :
+    RecyclerView.Adapter<CatFactsListAdapter.CatFactsViewHolder>() {
 
-    fun updateCatFacts(newCatFacts: MutableList<CatFact>){
-        catfacts.clear()
-        catfacts.addAll(newCatFacts)
+    fun updateCatFacts(newCatFacts: MutableList<CatFact>) {
+        catFacts.clear()
+        catFacts.addAll(newCatFacts)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CatFactsViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.row_item_layout, parent, false)
+        RowItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent,false)
     )
 
-    override fun getItemCount() = catfacts.size
+    override fun getItemCount() = catFacts.count()
 
     override fun onBindViewHolder(holder: CatFactsViewHolder, position: Int) {
-        holder.bind(catfacts[position])
+        holder.bind(catFacts[position])
     }
 
-    class CatFactsViewHolder(view: View): RecyclerView.ViewHolder(view){
-
-        private val catFactContent = view.cat_fact
-
-        fun bind(fact: CatFact){
-            catFactContent.text = fact.fact
+    class CatFactsViewHolder(private val binding: RowItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(fact: CatFact) {
+            binding.catFact.text = fact.fact
         }
     }
 }
