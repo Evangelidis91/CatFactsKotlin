@@ -6,6 +6,8 @@ import dagger.Component
 
 @Component(modules = [ApiModule::class])
 interface ApiComponent {
+
     fun inject(service: CatFactsService)
+
     fun inject(viewModel: ListViewModel)
 }
